@@ -1,16 +1,29 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PHOTOS } from '../constants';
-import { X, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Share2, Maximize2 } from 'lucide-react';
+import { playPop } from '../utils/audio';
 
 export default function Gallery() {
+  const [currentIndex, setCurrentIndex] = useState(Math.floor(PHOTOS.length / 2));
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedPhoto = PHOTOS.find(p => p.id === selectedId);
 
-  const navigate = (direction: number) => {
+  const navigateCoverflow = (direction: number) => {
+    playPop();
+    setCurrentIndex((prev) => {
+      let next = prev + direction;
+      if (next < 0) next = 0;
+      if (next > PHOTOS.length - 1) next = PHOTOS.length - 1;
+      return next;
+    });
+  };
+
+  const navigateModal = (direction: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!selectedId) return;
-    const currentIndex = PHOTOS.findIndex(p => p.id === selectedId);
-    let nextIndex = currentIndex + direction;
+    const currentIdx = PHOTOS.findIndex(p => p.id === selectedId);
+    let nextIndex = currentIdx + direction;
     if (nextIndex < 0) nextIndex = PHOTOS.length - 1;
     if (nextIndex >= PHOTOS.length) nextIndex = 0;
     setSelectedId(PHOTOS[nextIndex].id);
@@ -30,7 +43,6 @@ export default function Gallery() {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // Fallback: Copy to clipboard
         await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
         alert('Link copied to clipboard!');
       }
@@ -40,34 +52,89 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery" className="py-20 px-4 max-w-7xl mx-auto">
-      <div className="text-center mb-12 animate-on-scroll">
-        <h2 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">Our Memories</h2>
-        <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
+    <section id="gallery" className="py-24 px-4 overflow-hidden relative">
+      <div className="text-center mb-16 animate-on-scroll">
+        <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-dark mb-4">Our Memories</h2>
+        <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {PHOTOS.map((photo, index) => (
-          <motion.div
-            key={photo.id}
-            layoutId={photo.id}
-            onClick={() => setSelectedId(photo.id)}
-            className={`relative cursor-pointer overflow-hidden rounded-xl animate-on-scroll`}
-            style={{ transitionDelay: `${index * 100}ms` }}
-            whileHover={{ scale: 1.02 }}
+      <div className="relative h-[400px] md:h-[500px] max-w-6xl mx-auto flex items-center justify-center perspective-1000">
+        {PHOTOS.map((photo, index) => {
+          const offset = index - currentIndex;
+          const absOffset = Math.abs(offset);
+          const isActive = offset === 0;
+          
+          if (absOffset > 3) return null;
+
+          return (
+            <motion.div
+              key={photo.id}
+              layoutId={`cover-${photo.id}`}
+              onClick={() => {
+                if (!isActive) {
+                  navigateCoverflow(offset);
+                }
+              }}
+              className="absolute w-64 md:w-80 h-80 md:h-[400px] rounded-2xl overflow-hidden shadow-2xl cursor-pointer will-change-transform"
+              initial={false}
+              animate={{
+                x: offset * (window.innerWidth < 768 ? 60 : 120),
+                rotateY: offset * -25,
+                z: absOffset * -100,
+                scale: 1 - absOffset * 0.1,
+                zIndex: PHOTOS.length - absOffset,
+                opacity: absOffset > 2 ? 0 : 1,
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <img
+                src={photo.url}
+                alt={photo.caption}
+                className="w-full h-full object-cover pointer-events-none"
+                referrerPolicy="no-referrer"
+              />
+              
+              <div className={`absolute inset-0 bg-black/40 transition-opacity duration-300 ${isActive ? 'opacity-0 hover:opacity-10' : 'opacity-60'}`} />
+              
+              {isActive && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none"
+                >
+                  <p className="text-white font-bold text-lg">{photo.caption}</p>
+                </motion.div>
+              )}
+
+              {isActive && (
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setSelectedId(photo.id); playPop(); }}
+                  className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full backdrop-blur-md opacity-0 hover:opacity-100 transition-opacity hover:bg-primary"
+                >
+                  <Maximize2 size={20} />
+                </button>
+              )}
+            </motion.div>
+          );
+        })}
+
+        {/* Carousel Controls */}
+        <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-4 md:px-12 pointer-events-none z-50">
+          <button 
+            disabled={currentIndex === 0}
+            onClick={() => navigateCoverflow(-1)}
+            className="pointer-events-auto bg-card/80 text-primary-dark p-3 rounded-full backdrop-blur-xl shadow-lg border border-primary-light/20 hover:scale-110 active:scale-95 transition-all disabled:opacity-30"
           >
-            <img
-              src={photo.url}
-              alt={photo.caption}
-              className="w-full h-64 object-cover"
-              referrerPolicy="no-referrer"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-end p-4">
-              <p className="text-white text-sm font-medium">{photo.caption}</p>
-            </div>
-          </motion.div>
-        ))}
+            <ChevronLeft size={32} />
+          </button>
+          <button 
+            disabled={currentIndex === PHOTOS.length - 1}
+            onClick={() => navigateCoverflow(1)}
+            className="pointer-events-auto bg-card/80 text-primary-dark p-3 rounded-full backdrop-blur-xl shadow-lg border border-primary-light/20 hover:scale-110 active:scale-95 transition-all disabled:opacity-30"
+          >
+            <ChevronRight size={32} />
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -96,28 +163,28 @@ export default function Gallery() {
             </div>
 
             <button 
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-primary transition-colors"
-              onClick={(e) => { e.stopPropagation(); navigate(-1); }}
+              className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 text-white/50 hover:text-primary transition-colors"
+              onClick={(e) => navigateModal(-1, e)}
             >
               <ChevronLeft size={48} />
             </button>
 
             <button 
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-primary transition-colors"
-              onClick={(e) => { e.stopPropagation(); navigate(1); }}
+              className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 text-white/50 hover:text-primary transition-colors"
+              onClick={(e) => navigateModal(1, e)}
             >
               <ChevronRight size={48} />
             </button>
 
             <div className="max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
               <motion.img
-                layoutId={selectedId}
+                layoutId={`cover-${selectedId}`}
                 src={selectedPhoto.url}
                 alt={selectedPhoto.caption}
-                className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
                 referrerPolicy="no-referrer"
               />
-              <p className="text-white text-center mt-6 text-lg font-display italic">
+              <p className="text-white text-center mt-6 text-xl font-display italic tracking-wide drop-shadow-md">
                 {selectedPhoto.caption}
               </p>
             </div>

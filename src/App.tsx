@@ -10,6 +10,8 @@ import Gallery from './components/Gallery';
 import Reasons from './components/Reasons';
 import Timeline from './components/Timeline';
 import LoveLetter from './components/LoveLetter';
+import FutureLetter from './components/FutureLetter';
+import StarMap from './components/StarMap';
 import Playlist from './components/Playlist';
 import Promises from './components/Promises';
 import Quiz from './components/Quiz';
@@ -60,9 +62,11 @@ export default function App() {
         <motion.main style={{ x: contentX, y: contentY }} className="will-change-transform z-10 relative">
           <Hero />
           <Gallery />
+          <StarMap />
           <Reasons />
           <Timeline />
           <LoveLetter />
+          <FutureLetter />
           <VideoMessage />
           <Playlist />
           <Quiz />

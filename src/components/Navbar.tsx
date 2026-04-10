@@ -18,6 +18,7 @@ export default function Navbar() {
     { name: 'Reasons', href: '#reasons' },
     { name: 'Timeline', href: '#timeline' },
     { name: 'Letter', href: '#letter' },
+    { name: 'Future', href: '#future' },
     { name: 'Playlist', href: '#playlist' },
     { name: 'Quiz', href: '#quiz' },
     { name: 'Guestbook', href: '#guestbook' },
