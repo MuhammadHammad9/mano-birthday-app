@@ -28,8 +28,8 @@ export default function Playlist() {
       }
 
       try {
-        // 1. Get Access Token
-        const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+        // 1. Get Access Token (Using CORS proxy since Spotify blocks direct browser requests)
+        const tokenResponse = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://accounts.spotify.com/api/token'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
