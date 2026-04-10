@@ -6,3 +6,4 @@ coverage/
 *.log
 .env*
 !.env.example
+public/WIN_20260410_20_48_59_Pro.mp4

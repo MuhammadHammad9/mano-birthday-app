@@ -96,8 +96,8 @@ export default function SecretPage() {
                     making you feel as special as you truly are.
                   </p>
                   <div className="grid grid-cols-2 gap-4 mt-12">
-                    <img src="https://picsum.photos/seed/secret1/400/400" alt="Secret 1" className="rounded-2xl shadow-lg rotate-[-2deg]" referrerPolicy="no-referrer" />
-                    <img src="https://picsum.photos/seed/secret2/400/400" alt="Secret 2" className="rounded-2xl shadow-lg rotate-[2deg]" referrerPolicy="no-referrer" />
+                    <img src="/8.jpeg" alt="Secret 1" className="rounded-2xl shadow-lg rotate-[-2deg]" referrerPolicy="no-referrer" />
+                    <img src="/9.jpeg" alt="Secret 2" className="rounded-2xl shadow-lg rotate-[2deg]" referrerPolicy="no-referrer" />
                   </div>
                 </div>
               </div>

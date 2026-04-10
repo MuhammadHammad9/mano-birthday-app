@@ -14,12 +14,12 @@ export const COLORS = {
 export const RECIPIENT_NAME = "Amna";
 
 export const PHOTOS: Photo[] = [
-  { id: '1', url: 'https://picsum.photos/seed/love1/800/600', caption: 'First Meetup at GIKI on Media Fest 25' },
-  { id: '2', url: 'https://picsum.photos/seed/love2/800/1000', caption: 'The laughter' },
-  { id: '3', url: 'https://picsum.photos/seed/love3/800/600', caption: 'Morning Talks' },
-  { id: '4', url: 'https://picsum.photos/seed/love4/800/800', caption: 'Exploring with you' },
-  { id: '5', url: 'https://picsum.photos/seed/love5/800/600', caption: 'Your beautiful smile' },
-  { id: '6', url: 'https://picsum.photos/seed/love6/800/1200', caption: 'A memory I will cherish forever' },
+  { id: '1', url: '/1.jpeg', caption: 'First Meetup at GIKI on Media Fest 25' },
+  { id: '2', url: '/2.jpeg', caption: 'The laughter' },
+  { id: '3', url: '/3.jpeg', caption: 'Morning Talks' },
+  { id: '4', url: '/4.jpeg', caption: 'Exploring with you' },
+  { id: '5', url: '/5.jpeg', caption: 'Your beautiful smile' },
+  { id: '6', url: '/6.jpeg', caption: 'A memory I will cherish forever' },
 ];
 
 export const REASONS: Reason[] = [

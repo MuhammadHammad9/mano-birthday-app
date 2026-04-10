@@ -10,9 +10,9 @@ export default function VideoMessage() {
         <video 
           controls 
           className="w-full h-full object-cover"
-          poster="https://picsum.photos/seed/video-poster/1920/1080"
+          poster="/7.jpeg"
         >
-          <source src="/birthday_video.mp4" type="video/mp4" />
+          <source src="/WIN_20260410_20_48_59_Pro.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
