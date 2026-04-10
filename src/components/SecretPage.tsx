@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Lock, Heart, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import ScratchCard from './ScratchCard';
+import { playPop, playSuccessChime } from '../utils/audio';
 
 export default function SecretPage() {
   const [isLocked, setIsLocked] = useState(true);
@@ -16,6 +17,7 @@ export default function SecretPage() {
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
     if (password.toLowerCase() === CORRECT_PASSWORD) {
+      playSuccessChime();
       setIsLocked(false);
       confetti({
         particleCount: 150,
@@ -24,6 +26,7 @@ export default function SecretPage() {
         colors: ['#D4537E', '#FAC775', '#FFFFFF']
       });
     } else {
+      playPop();
       setError('Incorrect password. Try again?');
       setAttempts(a => a + 1);
       setPassword('');

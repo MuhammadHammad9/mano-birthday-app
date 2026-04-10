@@ -18,6 +18,7 @@ import Guestbook from './components/Guestbook';
 import SecretPage from './components/SecretPage';
 import Confetti from './components/Confetti';
 import FloatingBackground from './components/FloatingBackground';
+import MagicCursor from './components/MagicCursor';
 import { RECIPIENT_NAME } from './constants';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
@@ -50,7 +51,8 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-background selection:bg-primary-light selection:text-primary-dark overflow-hidden">
+      <div className="min-h-screen bg-background selection:bg-primary-light selection:text-primary-dark overflow-hidden transition-colors duration-1000">
+        <MagicCursor />
         <Confetti />
         <FloatingBackground />
         <Navbar />

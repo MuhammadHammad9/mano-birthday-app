@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { RECIPIENT_NAME } from '../constants';
 import { Menu, X } from 'lucide-react';
+import DarkModeToggle from './DarkModeToggle';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,12 +41,16 @@ export default function Navbar() {
               {link.name}
             </a>
           ))}
+          <DarkModeToggle />
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-primary-dark" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        <div className="md:hidden flex items-center gap-4">
+          <DarkModeToggle />
+          <button className="text-primary-dark" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

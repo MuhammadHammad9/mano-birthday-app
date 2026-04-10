@@ -14,6 +14,15 @@
   --color-card: #FFFFFF;
 }
 
+.dark {
+  --color-primary: #FAC775;
+  --color-primary-light: #2A1F3E;
+  --color-primary-dark: #FFF0F5;
+  --color-accent: #D4537E;
+  --color-background: #0A0A1A;
+  --color-card: #15152A;
+}
+
 @layer base {
   body {
     @apply bg-background text-primary-dark font-body;
@@ -33,4 +42,10 @@
 .animate-on-scroll.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }

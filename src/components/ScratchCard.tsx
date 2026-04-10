@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { startShimmer, stopShimmer } from '../utils/audio';
 
 interface ScratchCardProps {
   children: React.ReactNode;
@@ -74,6 +75,7 @@ export default function ScratchCard({ children, text = "Scratch to Reveal ✨", 
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDrawing(true);
+    startShimmer();
     handleDrag(e); // allow tap dots
   };
 
@@ -94,6 +96,7 @@ export default function ScratchCard({ children, text = "Scratch to Reveal ✨", 
 
   const handleDragEnd = () => {
     setIsDrawing(false);
+    stopShimmer();
     
     // Optional: We could check if X percent is scratched to fully reveal here.
   };
