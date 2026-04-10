@@ -9,8 +9,8 @@ export default function SecretPage() {
   const [error, setError] = useState('');
   const [attempts, setAttempts] = useState(0);
 
-  // The password is "ourfirstdate" (hashed in a real app, but for this demo we'll keep it simple)
-  const CORRECT_PASSWORD = "sara"; 
+  // The password is "amna"
+  const CORRECT_PASSWORD = "amna"; 
 
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();

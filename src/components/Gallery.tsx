@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PHOTOS } from '../constants';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Share2 } from 'lucide-react';
 
 export default function Gallery() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -14,6 +14,29 @@ export default function Gallery() {
     if (nextIndex < 0) nextIndex = PHOTOS.length - 1;
     if (nextIndex >= PHOTOS.length) nextIndex = 0;
     setSelectedId(PHOTOS[nextIndex].id);
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!selectedPhoto) return;
+
+    const shareData = {
+      title: "Amna's Birthday Memory",
+      text: `Check out this memory from Amna's birthday website: ${selectedPhoto.caption}`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback: Copy to clipboard
+        await navigator.clipboard.writeText(`${shareData.text} - ${shareData.url}`);
+        alert('Link copied to clipboard!');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
   };
 
   return (
@@ -56,12 +79,21 @@ export default function Gallery() {
             className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
             onClick={() => setSelectedId(null)}
           >
-            <button 
-              className="absolute top-6 right-6 text-white hover:text-primary transition-colors"
-              onClick={() => setSelectedId(null)}
-            >
-              <X size={32} />
-            </button>
+            <div className="absolute top-6 right-6 flex items-center gap-4">
+              <button 
+                className="text-white hover:text-primary transition-colors p-2 bg-white/10 rounded-full"
+                onClick={handleShare}
+                title="Share memory"
+              >
+                <Share2 size={24} />
+              </button>
+              <button 
+                className="text-white hover:text-primary transition-colors"
+                onClick={() => setSelectedId(null)}
+              >
+                <X size={32} />
+              </button>
+            </div>
 
             <button 
               className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-primary transition-colors"

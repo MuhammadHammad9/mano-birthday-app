@@ -75,8 +75,7 @@ export default function Quiz() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <div className="flex justify-between items-center mb-8">
-                <span className="text-xs font-bold text-primary uppercase tracking-widest">Question {currentQuestionIndex + 1} of {QUIZ.length}</span>
+              <div className="flex justify-end items-center mb-8">
                 <span className="text-xs font-bold text-text-secondary">Score: {score}</span>
               </div>
               

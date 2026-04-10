@@ -17,6 +17,7 @@ import VideoMessage from './components/VideoMessage';
 import Guestbook from './components/Guestbook';
 import SecretPage from './components/SecretPage';
 import Confetti from './components/Confetti';
+import { RECIPIENT_NAME } from './constants';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 export default function App() {
@@ -43,7 +44,7 @@ export default function App() {
         </main>
 
         <footer className="py-12 px-4 text-center border-t border-primary-light/20 bg-white">
-          <p className="font-display text-xl text-primary-dark mb-2">Happy Birthday, Sara!</p>
+          <p className="font-display text-xl text-primary-dark mb-2">Happy Birthday, {RECIPIENT_NAME}!</p>
           <p className="text-text-secondary text-sm">Made with ♥ by Hammad</p>
           <div className="mt-4 text-[10px] text-primary-light/50 uppercase tracking-[0.2em]">
             © 2026 • Forever & Always

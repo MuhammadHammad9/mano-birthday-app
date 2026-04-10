@@ -11,13 +11,13 @@ export const COLORS = {
   textSecondary: '#666666',
 };
 
-export const RECIPIENT_NAME = "Sara";
+export const RECIPIENT_NAME = "Amna";
 
 export const PHOTOS: Photo[] = [
-  { id: '1', url: 'https://picsum.photos/seed/love1/800/600', caption: 'Our first date at the park' },
-  { id: '2', url: 'https://picsum.photos/seed/love2/800/1000', caption: 'That sunset we watched together' },
-  { id: '3', url: 'https://picsum.photos/seed/love3/800/600', caption: 'Coffee mornings are the best' },
-  { id: '4', url: 'https://picsum.photos/seed/love4/800/800', caption: 'Exploring the city' },
+  { id: '1', url: 'https://picsum.photos/seed/love1/800/600', caption: 'First Meetup at GIKI on Media Fest 25' },
+  { id: '2', url: 'https://picsum.photos/seed/love2/800/1000', caption: 'The laughter' },
+  { id: '3', url: 'https://picsum.photos/seed/love3/800/600', caption: 'Morning Talks' },
+  { id: '4', url: 'https://picsum.photos/seed/love4/800/800', caption: 'Exploring with you' },
   { id: '5', url: 'https://picsum.photos/seed/love5/800/600', caption: 'Your beautiful smile' },
   { id: '6', url: 'https://picsum.photos/seed/love6/800/1200', caption: 'A memory I will cherish forever' },
 ];
@@ -36,10 +36,10 @@ export const REASONS: Reason[] = [
 ];
 
 export const TIMELINE: TimelineEvent[] = [
-  { id: '1', date: 'March 2023', title: 'The Day We Met', description: 'At that small cafe, I knew there was something special about you.' },
-  { id: '2', date: 'April 2023', title: 'Our First Date', description: 'Walking through the botanical gardens, talking for hours.' },
-  { id: '3', date: 'June 2023', title: 'First "I Love You"', description: 'Under the stars, it felt like the most natural thing to say.' },
-  { id: '4', date: 'September 2023', title: 'Our First Trip', description: 'Exploring the mountains and making so many memories.' },
+  { id: '1', date: '24th January 2025', title: 'The Day We Met', description: 'At GIKI, I knew there was something special about you.' },
+  { id: '2', date: 'February 2025', title: 'Our First Call', description: 'Talking for hours on the phone, getting to know each other deeply.' },
+  { id: '3', date: 'June 2025', title: 'First "I Love You"', description: 'Under the stars, it felt like the most natural thing to say.' },
+  { id: '4', date: 'September 2025', title: 'You sent alot of Happy birthdays', description: 'Waking up to your sweet messages made my day so much better.' },
   { id: '5', date: 'April 2026', title: 'Today', description: 'Celebrating you and the beautiful person you are. Happy Birthday!' },
 ];
 
@@ -54,8 +54,8 @@ export const PROMISES: PromiseItem[] = [
 export const QUIZ: QuizQuestion[] = [
   {
     id: '1',
-    question: 'Where was our very first date?',
-    options: ['Botanical Gardens', 'The Cinema', 'A Cafe', 'The Beach'],
+    question: 'Where was our very first meetup?',
+    options: ['GIKI', 'The Cinema', 'A Cafe', 'The Beach'],
     correctAnswer: 0,
   },
   {
@@ -69,5 +69,47 @@ export const QUIZ: QuizQuestion[] = [
     question: 'Which song is "our" song?',
     options: ['Perfect', 'All of Me', 'Lover', 'Thinking Out Loud'],
     correctAnswer: 2,
+  },
+  {
+    id: '4',
+    question: 'When did we first meet?',
+    options: ['24th January 2025', '1st January 2025', '14th February 2025', '25th December 2024'],
+    correctAnswer: 0,
+  },
+  {
+    id: '5',
+    question: 'Where did Media Fest 25 take place?',
+    options: ['GIKI', 'NUST', 'LUMS', 'FAST'],
+    correctAnswer: 0,
+  },
+  {
+    id: '6',
+    question: 'What is my favorite color on you?',
+    options: ['Red', 'Black', 'White', 'Blue'],
+    correctAnswer: 1,
+  },
+  {
+    id: '7',
+    question: 'Which ice cream flavor do we both love?',
+    options: ['Chocolate', 'Vanilla', 'Mango', 'Kulfa'],
+    correctAnswer: 0,
+  },
+  {
+    id: '8',
+    question: 'What was the first movie we watched together?',
+    options: ['Munna Micheal', 'The Notebook', 'Spider-Man', 'Inception'],
+    correctAnswer: 0,
+  },
+  {
+    id: '9',
+    question: 'Who is more likely to fall asleep during a movie?',
+    options: ['Me', 'You', 'Both', 'Neither'],
+    correctAnswer: 1,
+  },
+  {
+    id: '10',
+    question: 'What is our dream travel destination?',
+    options: ['Switzerland', 'Turkey', 'Japan', 'Maldives'],
+    correctAnswer: 1,
   },
 ];

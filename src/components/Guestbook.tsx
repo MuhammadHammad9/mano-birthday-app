@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Send, MessageSquare, LogIn } from 'lucide-react';
-import { db, auth, loginWithGoogle, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from '../firebase';
+import { Send, MessageSquare, LogIn, Trash2 } from 'lucide-react';
+import { db, auth, loginWithGoogle, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, deleteDoc, doc } from '../firebase';
 import { handleFirestoreError, OperationType } from '../firestoreUtils';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Message {
   id: string;
@@ -19,14 +20,21 @@ export default function Guestbook() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const ADMIN_EMAIL = "muhammad.hammad.03115@gmail.com";
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
 
+    // Set a timeout to stop loading even if auth state doesn't resolve
+    const timer = setTimeout(() => setLoading(false), 3000);
+
     const path = 'wishes';
-    const q = query(collection(db, path), orderBy('createdAt', 'desc'));
+    // Remove orderBy to avoid potential index/permission issues during debug
+    const q = query(collection(db, path));
     
     const unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => ({
@@ -35,12 +43,13 @@ export default function Guestbook() {
       })) as Message[];
       setMessages(msgs);
     }, (error) => {
-      handleFirestoreError(error, OperationType.GET, path);
+      handleFirestoreError(error, OperationType.LIST, path);
     });
 
     return () => {
       unsubscribeAuth();
       unsubscribeSnapshot();
+      clearTimeout(timer);
     };
   }, []);
 
@@ -64,24 +73,43 @@ export default function Guestbook() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-text-secondary">
-        <p>Loading guestbook...</p>
-      </div>
-    );
-  }
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this message?')) return;
+    
+    const path = 'wishes';
+    try {
+      await deleteDoc(doc(db, path, id));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.DELETE, path);
+    }
+  };
+
+  // Sort messages client-side for now to avoid server-side index requirements
+  const sortedMessages = [...messages].sort((a, b) => {
+    const dateA = a.createdAt?.seconds || 0;
+    const dateB = b.createdAt?.seconds || 0;
+    return dateB - dateA;
+  });
 
   return (
     <section id="guestbook" className="py-20 px-4 max-w-5xl mx-auto">
-      <div className="text-center mb-16 animate-on-scroll">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-16"
+      >
         <h2 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">Guestbook</h2>
         <p className="text-text-secondary">Leave a wish for the birthday girl!</p>
-      </div>
+      </motion.div>
 
       <div className="grid md:grid-cols-2 gap-12">
         {/* Form */}
-        <div className="animate-on-scroll">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
           {!user ? (
             <div className="bg-white p-8 rounded-3xl border border-primary-light/30 shadow-lg text-center">
               <LogIn className="mx-auto mb-4 text-primary" size={48} />
@@ -129,20 +157,45 @@ export default function Guestbook() {
               </p>
             </form>
           )}
-        </div>
+        </motion.div>
 
         {/* Messages List */}
-        <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4 animate-on-scroll">
-          {messages.map((msg) => (
-            <div key={msg.id} className="bg-white p-6 rounded-2xl border border-primary-light/20 shadow-sm relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="flex justify-between items-start mb-2">
-                <h4 className="font-bold text-primary-dark">{msg.name}</h4>
-                <span className="text-xl">{msg.emoji}</span>
-              </div>
-              <p className="text-text-secondary text-sm leading-relaxed">{msg.message}</p>
-            </div>
-          ))}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="space-y-6 max-h-[600px] overflow-y-auto pr-4"
+        >
+          <AnimatePresence initial={false}>
+            {sortedMessages.map((msg) => (
+              <motion.div 
+                key={msg.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white p-6 rounded-2xl border border-primary-light/20 shadow-sm relative overflow-hidden group"
+              >
+                <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="font-bold text-primary-dark">{msg.name}</h4>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{msg.emoji}</span>
+                    {isAdmin && (
+                      <button 
+                        onClick={() => handleDelete(msg.id)}
+                        className="text-red-400 hover:text-red-600 transition-colors p-1"
+                        title="Delete message"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <p className="text-text-secondary text-sm leading-relaxed">{msg.message}</p>
+              </motion.div>
+            ))}
+          </AnimatePresence>
           
           {messages.length === 0 && (
             <div className="text-center py-12 text-text-secondary opacity-50">
@@ -150,7 +203,7 @@ export default function Guestbook() {
               <p>No wishes yet. Be the first!</p>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
