@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Lock, Heart, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import ScratchCard from './ScratchCard';
 
 export default function SecretPage() {
   const [isLocked, setIsLocked] = useState(true);
@@ -95,9 +96,13 @@ export default function SecretPage() {
                     You are the most important person in my life, and I want to spend every single day 
                     making you feel as special as you truly are.
                   </p>
-                  <div className="grid grid-cols-2 gap-4 mt-12">
-                    <img src="/8.jpeg" alt="Secret 1" className="rounded-2xl shadow-lg rotate-[-2deg]" referrerPolicy="no-referrer" />
-                    <img src="/9.jpeg" alt="Secret 2" className="rounded-2xl shadow-lg rotate-[2deg]" referrerPolicy="no-referrer" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                    <ScratchCard className="rotate-[-2deg]" text="Scratch me!">
+                      <img src="/8.jpeg" alt="Secret 1" className="w-full h-auto rounded-none shadow-none" referrerPolicy="no-referrer" />
+                    </ScratchCard>
+                    <ScratchCard className="rotate-[2deg]" text="Scratch for more✨">
+                      <img src="/9.jpeg" alt="Secret 2" className="w-full h-auto rounded-none shadow-none" referrerPolicy="no-referrer" />
+                    </ScratchCard>
                   </div>
                 </div>
               </div>

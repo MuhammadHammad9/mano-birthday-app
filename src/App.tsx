@@ -17,6 +17,7 @@ import VideoMessage from './components/VideoMessage';
 import Guestbook from './components/Guestbook';
 import SecretPage from './components/SecretPage';
 import Confetti from './components/Confetti';
+import FloatingBackground from './components/FloatingBackground';
 import { RECIPIENT_NAME } from './constants';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
 
@@ -27,6 +28,7 @@ export default function App() {
     <ErrorBoundary>
       <div className="min-h-screen bg-background selection:bg-primary-light selection:text-primary-dark">
         <Confetti />
+        <FloatingBackground />
         <Navbar />
         
         <main>
