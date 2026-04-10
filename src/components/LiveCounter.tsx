@@ -5,7 +5,8 @@ export default function LiveCounter() {
   const [timeLeft, setTimeLeft] = useState({ years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const startDate = new Date('2025-01-24T00:00:00');
+    // Start Date: 8th April 2025
+    const startDate = new Date('2025-04-08T00:00:00');
 
     const interval = setInterval(() => {
       const now = new Date();
