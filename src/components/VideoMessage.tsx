@@ -6,16 +6,15 @@ export default function VideoMessage() {
         <p className="text-text-secondary">Press play. I have something to say to you.</p>
       </div>
 
-      <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-on-scroll">
-        <iframe 
-          width="100%" 
-          height="100%" 
-          src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1" 
-          title="Birthday Message" 
-          frameBorder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowFullScreen
-        ></iframe>
+      <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-on-scroll bg-black flex items-center justify-center">
+        <video 
+          controls 
+          className="w-full h-full object-cover"
+          poster="https://picsum.photos/seed/video-poster/1920/1080"
+        >
+          <source src="/birthday_video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
     </section>
   );
