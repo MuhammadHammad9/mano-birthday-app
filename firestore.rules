@@ -1,0 +1,75 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: wishes
+// Document ID: auto-generated
+// Fields:
+//   - name: string (required, 1-100 chars) - Submitter's name
+//   - message: string (required, 1-500 chars) - Birthday wish
+//   - relationship: string (optional, 0-100 chars) - Relation to recipient
+//   - emoji: string (optional, 0-10 chars) - Selected emoji
+//   - createdAt: timestamp (required) - Creation time
+//   - authorUid: string (required) - UID of the authenticated user
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "muhammad.hammad.03115@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidWish(data) {
+      return data.keys().hasAll(['name', 'message', 'createdAt', 'authorUid']) &&
+             data.keys().hasOnly(['name', 'message', 'createdAt', 'authorUid', 'relationship', 'emoji']) &&
+             data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+             data.message is string && data.message.size() >= 1 && data.message.size() <= 500 &&
+             data.authorUid == request.auth.uid &&
+             data.createdAt == request.time &&
+             (!('relationship' in data) || (data.relationship is string && data.relationship.size() <= 100)) &&
+             (!('emoji' in data) || (data.emoji is string && data.emoji.size() <= 10));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /wishes/{wishId} {
+      // Allow anyone to read wishes (to see the wish wall)
+      allow read: if true;
+      
+      // Allow authenticated users to create a wish
+      allow create: if isAuthenticated() && isValidWish(request.resource.data);
+      
+      // Only admins can update or delete wishes (moderation)
+      allow update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

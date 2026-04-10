@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lora:wght@400;500;600&family=Dancing+Script:wght@400;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", serif;
+  --font-body: "Lora", serif;
+  --font-handwriting: "Dancing Script", cursive;
+  
+  --color-primary: #D4537E;
+  --color-primary-light: #F4C0D1;
+  --color-primary-dark: #4B1528;
+  --color-accent: #FAC775;
+  --color-background: #FFFAF9;
+  --color-card: #FFFFFF;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-primary-dark font-body;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

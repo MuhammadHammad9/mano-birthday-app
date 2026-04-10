@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "GuestbookMessage": {
+      "title": "Guestbook Message",
+      "description": "A birthday wish left by a friend or family member.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the person leaving the wish."
+        },
+        "relationship": {
+          "type": "string",
+          "description": "The relationship to the recipient."
+        },
+        "message": {
+          "type": "string",
+          "description": "The birthday message content."
+        },
+        "emoji": {
+          "type": "string",
+          "description": "An optional emoji mood selector."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the message was created."
+        }
+      },
+      "required": ["name", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/wishes/{wishId}": {
+      "schema": "GuestbookMessage",
+      "description": "Collection of birthday wishes."
+    }
+  }
+}
