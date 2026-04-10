@@ -20,18 +20,42 @@ import Confetti from './components/Confetti';
 import FloatingBackground from './components/FloatingBackground';
 import { RECIPIENT_NAME } from './constants';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { useEffect } from 'react';
 
 export default function App() {
   useScrollAnimation();
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 40, damping: 20, mass: 0.5 });
+  const springY = useSpring(mouseY, { stiffness: 40, damping: 20, mass: 0.5 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      mouseX.set((e.clientX - centerX) / centerX);
+      mouseY.set((e.clientY - centerY) / centerY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  // Subtle reverse movement for content layer
+  const contentX = useTransform(springX, [-1, 1], [-10, 10]);
+  const contentY = useTransform(springY, [-1, 1], [-10, 10]);
+
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-background selection:bg-primary-light selection:text-primary-dark">
+      <div className="min-h-screen bg-background selection:bg-primary-light selection:text-primary-dark overflow-hidden">
         <Confetti />
         <FloatingBackground />
         <Navbar />
         
-        <main>
+        <motion.main style={{ x: contentX, y: contentY }} className="will-change-transform z-10 relative">
           <Hero />
           <Gallery />
           <Reasons />
@@ -43,7 +67,7 @@ export default function App() {
           <Promises />
           <Guestbook />
           <SecretPage />
-        </main>
+        </motion.main>
 
         <footer className="py-12 px-4 text-center border-t border-primary-light/20 bg-white">
           <p className="font-display text-xl text-primary-dark mb-2">Happy Birthday, {RECIPIENT_NAME}!</p>
