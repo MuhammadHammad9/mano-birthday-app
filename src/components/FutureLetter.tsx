@@ -24,6 +24,12 @@ export default function FutureLetter() {
       });
       
       const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Gemini API Error:", data);
+        throw new Error("Failed to generate prediction.");
+      }
+
       const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "The stars are aligning perfectly for us...";
       
       playSuccessChime();
