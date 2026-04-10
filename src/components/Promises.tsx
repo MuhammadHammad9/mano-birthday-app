@@ -3,7 +3,7 @@ import { CheckCircle2 } from 'lucide-react';
 
 export default function Promises() {
   return (
-    <section id="promises" className="py-20 bg-primary-dark text-white px-4">
+    <section id="promises" className="py-20 bg-card text-primary-dark px-4 border-y border-primary-light/20 transition-colors duration-500">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16 animate-on-scroll">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">My Promises to You</h2>

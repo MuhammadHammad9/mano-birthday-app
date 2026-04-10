@@ -71,7 +71,7 @@ export default function App() {
           <SecretPage />
         </motion.main>
 
-        <footer className="py-12 px-4 text-center border-t border-primary-light/20 bg-white">
+        <footer className="py-12 px-4 text-center border-t border-primary-light/20 bg-card transition-colors duration-500">
           <p className="font-display text-xl text-primary-dark mb-2">Happy Birthday, {RECIPIENT_NAME}!</p>
           <p className="text-text-secondary text-sm">Made with ♥ by Hammad</p>
           <div className="mt-4 text-[10px] text-primary-light/50 uppercase tracking-[0.2em]">

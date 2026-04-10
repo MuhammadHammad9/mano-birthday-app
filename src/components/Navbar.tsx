@@ -24,7 +24,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${isScrolled ? 'bg-card/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <a href="#" className="font-display font-bold text-2xl text-primary-dark tracking-tight">
           {RECIPIENT_NAME}<span className="text-primary">.</span>
@@ -54,7 +54,7 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed inset-0 bg-white z-50 flex flex-col items-center justify-center gap-8 transition-transform duration-500 md:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed inset-0 bg-card z-50 flex flex-col items-center justify-center gap-8 transition-transform duration-500 md:hidden ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <button className="absolute top-6 right-6 text-primary-dark" onClick={() => setIsMenuOpen(false)}>
           <X size={32} />
         </button>
