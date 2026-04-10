@@ -1,87 +1,74 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+
+// Elements are generated once — stable across re-renders
+const ELEMENTS = [...Array(40)].map((_, i) => ({
+  id: i,
+  left: (i * 2.618) % 100, // Golden ratio distribution — no clumping
+  duration: 20 + (i % 15),
+  delay: -(i * 1.3),
+  scale: 0.4 + (i % 7) * 0.1,
+  type: i % 5 === 0 ? '✨' : '♥',
+  depth: 20 + (i % 8) * 10,
+}));
+
+// A single particle that computes its own parallax transforms correctly
+function Particle({ el, springX, springY }: {
+  el: typeof ELEMENTS[0];
+  springX: ReturnType<typeof useSpring>;
+  springY: ReturnType<typeof useSpring>;
+}) {
+  // Safe: useTransform is called at the top-level of a component, not inside a loop in the parent
+  const xOffset = useTransform(springX, [-1, 1], [-el.depth, el.depth]);
+  const yOffset = useTransform(springY, [-1, 1], [-el.depth, el.depth]);
+
+  return (
+    <motion.div
+      className="absolute text-primary-light will-change-transform select-none pointer-events-none"
+      style={{
+        opacity: el.type === '✨' ? 0.7 : 0.25,
+        left: `${el.left}%`,
+        scale: el.scale,
+        fontSize: '2rem',
+        x: xOffset,
+      }}
+      animate={{
+        y: ['110vh', '-15vh'],
+        rotate: [0, el.id % 2 === 0 ? 360 : -360],
+      }}
+      transition={{
+        y: { duration: el.duration, repeat: Infinity, ease: 'linear', delay: el.delay },
+        rotate: { duration: el.duration * 0.8, repeat: Infinity, ease: 'linear' },
+      }}
+    >
+      <motion.div style={{ y: yOffset }}>
+        {el.type}
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function FloatingBackground() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Buttery smooth physics for the mouse movement
   const springX = useSpring(mouseX, { stiffness: 40, damping: 20, mass: 0.5 });
   const springY = useSpring(mouseY, { stiffness: 40, damping: 20, mass: 0.5 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Get exact center of screen
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      
-      // Calculate offset from center (from -1 to 1)
-      const x = (e.clientX - centerX) / centerX;
-      const y = (e.clientY - centerY) / centerY;
-      
-      mouseX.set(x);
-      mouseY.set(y);
+      mouseX.set((e.clientX - window.innerWidth / 2) / (window.innerWidth / 2));
+      mouseY.set((e.clientY - window.innerHeight / 2) / (window.innerHeight / 2));
     };
-
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [mouseX, mouseY]);
 
-  // Generate deterministic elements so they don't jump around on re-renders
-  const [elements] = useState(() => 
-    [...Array(40)].map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      duration: Math.random() * 30 + 20, // 20 to 50 seconds to drift up
-      delay: Math.random() * -50,
-      scale: Math.random() * 0.7 + 0.3, // 0.3 to 1.0 scale
-      type: Math.random() > 0.8 ? '✨' : '♥',
-      depth: Math.random() * 100 + 20 // Parallax multiplier
-    }))
-  );
-
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden perspective-1000">
-      {elements.map((el) => {
-        // Each element translates differently based on its "depth" for true 3D parallax
-        const xOffset = useTransform(springX, [-1, 1], [-el.depth, el.depth]);
-        const yOffset = useTransform(springY, [-1, 1], [-el.depth, el.depth]);
-
-        return (
-          <motion.div
-            key={el.id}
-            className="absolute text-primary-light will-change-transform"
-            style={{ 
-              opacity: el.type === '✨' ? 0.8 : 0.3,
-              left: `${el.left}%`,
-              scale: el.scale,
-              fontSize: '2rem',
-              x: xOffset,
-            }}
-            animate={{
-              y: ['120vh', '-20vh'], // Infinite drift heavily padded to prevent clipping
-              rotate: [0, Math.random() > 0.5 ? 360 : -360],
-            }}
-            transition={{
-              y: {
-                duration: el.duration,
-                repeat: Infinity,
-                ease: 'linear',
-                delay: el.delay,
-              },
-              rotate: {
-                duration: el.duration * 0.8,
-                repeat: Infinity,
-                ease: 'linear',
-              }
-            }}
-          >
-            <motion.div style={{ y: yOffset }}>
-              {el.type}
-            </motion.div>
-          </motion.div>
-        );
-      })}
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {ELEMENTS.map((el) => (
+        <Particle key={el.id} el={el} springX={springX} springY={springY} />
+      ))}
     </div>
   );
 }

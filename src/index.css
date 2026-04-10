@@ -19,15 +19,19 @@
   --color-accent: #FAC775;
   --color-background: #FFFAF9;
   --color-card: #FFFFFF;
+  --color-text-primary: #3A1020;
+  --color-text-secondary: #7A4A5A;
 }
 
 .dark {
-  --color-primary: #E57297;       /* Brighter pink for glowing contrast */
-  --color-primary-light: #52182D; /* Deep rich maroon for element backgrounds */
-  --color-primary-dark: #FFE5EE;  /* Pale pink/white for highly legible text */
-  --color-accent: #FAC775;        /* Keep the magical gold accent */
-  --color-background: #14070D;    /* Midnight burgundy (Luxurious black/pink tint) */
-  --color-card: #240D17;          /* Slightly lighter midnight burgundy for cards */
+  --color-primary: #E57297;
+  --color-primary-light: #52182D;
+  --color-primary-dark: #FFE5EE;
+  --color-accent: #FAC775;
+  --color-background: #14070D;
+  --color-card: #240D17;
+  --color-text-primary: #F9E4EC;
+  --color-text-secondary: #C4859A;
 }
 
 @layer base {

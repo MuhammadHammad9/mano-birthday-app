@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { RECIPIENT_NAME } from '../constants';
 import { Heart } from 'lucide-react';
@@ -9,47 +9,53 @@ export default function LoveLetter() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isHolding, setIsHolding] = useState(false);
   const [progress, setProgress] = useState(0);
-  const progressRef = useRef(progress);
+  const intervalRef = useRef<number | null>(null);
+  const isHoldingRef = useRef(false);
+  const isUnlockedRef = useRef(false);
 
-  useEffect(() => {
-    progressRef.current = progress;
-  }, [progress]);
-
-  useEffect(() => {
-    let interval: number;
-
-    if (isHolding && !isUnlocked) {
-      interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setIsUnlocked(true);
-            playSuccessChime();
-            confetti({
-              particleCount: 150,
-              spread: 100,
-              origin: { y: 0.6 },
-              colors: ['#D4537E', '#FAC775', '#F4C0D1']
-            });
-            return 100;
-          }
-          return prev + 2;
-        });
-      }, 50);
-    } else if (!isHolding && !isUnlocked && progress > 0) {
-      interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev <= 0) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 3;
-        });
-      }, 30);
+  const clearTick = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
+  };
 
-    return () => clearInterval(interval);
-  }, [isHolding, isUnlocked, progress]);
+  const startHolding = useCallback(() => {
+    if (isUnlockedRef.current) return;
+    isHoldingRef.current = true;
+    setIsHolding(true);
+    clearTick();
+    intervalRef.current = setInterval(() => {
+      setProgress(prev => {
+        const next = prev + 2;
+        if (next >= 100) {
+          clearTick();
+          isUnlockedRef.current = true;
+          setIsUnlocked(true);
+          playSuccessChime();
+          confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#D4537E', '#FAC775', '#F4C0D1'] });
+          return 100;
+        }
+        return next;
+      });
+    }, 50);
+  }, []);
+
+  const stopHolding = useCallback(() => {
+    if (isUnlockedRef.current) return;
+    isHoldingRef.current = false;
+    setIsHolding(false);
+    clearTick();
+    intervalRef.current = setInterval(() => {
+      setProgress(prev => {
+        if (prev <= 0) { clearTick(); return 0; }
+        return prev - 4;
+      });
+    }, 30);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => clearTick, []);
 
   return (
     <section id="letter" className="py-24 bg-primary-light/5 px-4 min-h-[600px] flex items-center justify-center relative overflow-hidden">
@@ -67,10 +73,11 @@ export default function LoveLetter() {
                 A Message For Your Heart
               </h2>
               
-              <div className="relative cursor-pointer select-none touch-none"
-                   onPointerDown={() => setIsHolding(true)}
-                   onPointerUp={() => setIsHolding(false)}
-                   onPointerLeave={() => setIsHolding(false)}
+              <div
+                className="relative cursor-pointer select-none touch-none"
+                onPointerDown={startHolding}
+                onPointerUp={stopHolding}
+                onPointerLeave={stopHolding}
               >
                 {/* SVG Progress Ring */}
                 <svg className="w-48 h-48 -rotate-90 absolute -inset-6 drop-shadow-xl pointer-events-none" viewBox="0 0 100 100">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, Loader2, FastForward } from 'lucide-react';
 import { playPop, playSuccessChime } from '../utils/audio';
@@ -6,49 +6,55 @@ import { playPop, playSuccessChime } from '../utils/audio';
 export default function FutureLetter() {
   const [prediction, setPrediction] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const intervalRef = useRef<number | null>(null);
 
   const fetchPrediction = async () => {
+    if (isLoading) return;
+    // Clear any previous typewriter
+    if (intervalRef.current) clearInterval(intervalRef.current);
+
     playPop();
     setIsLoading(true);
     setPrediction('');
-    
+
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: "Write a completely unique, highly romantic 3 sentence short story about Hammad and Amna 5 years in the future. Make it extremely sweet, incredibly luxurious, and unique every time. Do not use hashtags or weird formatting." }] }],
-          generationConfig: { temperature: 0.9 }
-        })
-      });
-      
+      if (!apiKey) throw new Error('API key missing');
+
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: 'Write a completely unique, highly romantic 3 sentence short story about Hammad and Amna 5 years in the future. Make it extremely sweet, luxurious, and unique every time. No hashtags.' }] }],
+            generationConfig: { temperature: 0.95 },
+          }),
+        }
+      );
+
       const data = await response.json();
+      if (!response.ok) throw new Error(data?.error?.message || 'API error');
 
-      if (!response.ok) {
-        console.error("Gemini API Error:", data);
-        throw new Error("Failed to generate prediction.");
-      }
-
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "The stars are aligning perfectly for us...";
-      
+      const text: string = data.candidates?.[0]?.content?.parts?.[0]?.text || 'The stars are aligning perfectly for us...';
       playSuccessChime();
-      
-      let currentText = '';
+
+      // Typewriter effect — loading ends only when the last character is typed
       const chars = text.split('');
-      
-      const interval = setInterval(() => {
+      let built = '';
+      intervalRef.current = setInterval(() => {
         if (chars.length === 0) {
-          clearInterval(interval);
+          clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+          setIsLoading(false);
           return;
         }
-        currentText += chars.shift();
-        setPrediction(currentText);
-      }, 30);
-      
-    } catch (e) {
-      setPrediction("My love for you transcends time, but it seems our futuristic connection is temporarily offline.");
-    } finally {
+        built += chars.shift();
+        setPrediction(built);
+      }, 22);
+
+    } catch {
+      setPrediction('My love for you transcends time, but it seems our connection is temporarily offline. Try again soon. ✨');
       setIsLoading(false);
     }
   };
