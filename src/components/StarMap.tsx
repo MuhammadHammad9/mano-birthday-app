@@ -62,7 +62,7 @@ export default function StarMap() {
           </motion.div>
         </div>
 
-        <div className="md:w-1/2 w-full flex justify-center perspective-1000 relative">
+        <div className="md:w-1/2 w-full flex justify-center [perspective:1000px] relative">
           <motion.div 
             ref={containerRef}
             onMouseMove={handleMouseMove}

@@ -58,7 +58,7 @@ export default function Gallery() {
         <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
       </div>
 
-      <div className="relative h-[400px] md:h-[500px] max-w-6xl mx-auto flex items-center justify-center perspective-1000">
+      <div className="relative h-[400px] md:h-[500px] max-w-6xl mx-auto flex items-center justify-center [perspective:1000px]">
         {PHOTOS.map((photo, index) => {
           const offset = index - currentIndex;
           const absOffset = Math.abs(offset);
