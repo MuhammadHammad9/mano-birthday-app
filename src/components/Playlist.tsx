@@ -43,7 +43,7 @@ export default function Playlist() {
         if (!token) throw new Error("Failed to authenticate with Spotify");
 
         // 2. Fetch Playlist Tracks
-        const playlistId = '37i9dQZF1DX7rOY2tusoIU';
+        const playlistId = '29XEQO1WqbhPru3U7QiUd0';
         const playlistResponse = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -87,7 +87,7 @@ export default function Playlist() {
         <div className="animate-on-scroll">
           <iframe 
             style={{ borderRadius: '12px' }} 
-            src="https://open.spotify.com/embed/playlist/37i9dQZF1DX7rOY2tusoIU?utm_source=generator" 
+            src="https://open.spotify.com/embed/playlist/29XEQO1WqbhPru3U7QiUd0?utm_source=generator" 
             width="100%" 
             height="380" 
             frameBorder="0" 
