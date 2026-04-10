@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { RECIPIENT_NAME } from '../constants';
 import { Menu, X } from 'lucide-react';
 import DarkModeToggle from './DarkModeToggle';
+import MusicPlayer from './MusicPlayer';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +33,7 @@ export default function Navbar() {
         </a>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
@@ -42,13 +43,17 @@ export default function Navbar() {
               {link.name}
             </a>
           ))}
-          <DarkModeToggle />
+          <div className="flex items-center gap-3 border-l border-primary-light/20 pl-6 ml-2">
+            <MusicPlayer />
+            <DarkModeToggle />
+          </div>
         </div>
 
         {/* Mobile Toggle */}
-        <div className="md:hidden flex items-center gap-4">
+        <div className="md:hidden flex items-center gap-3">
+          <MusicPlayer />
           <DarkModeToggle />
-          <button className="text-primary-dark" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="text-primary-dark ml-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>

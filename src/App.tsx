@@ -26,8 +26,11 @@ import { useScrollAnimation } from './hooks/useScrollAnimation';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { useEffect } from 'react';
 
+import { useDynamicTitle } from './hooks/useDynamicTitle';
+
 export default function App() {
   useScrollAnimation();
+  useDynamicTitle();
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
