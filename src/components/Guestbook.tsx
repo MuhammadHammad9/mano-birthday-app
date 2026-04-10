@@ -111,7 +111,7 @@ export default function Guestbook() {
           viewport={{ once: true }}
         >
           {!user ? (
-            <div className="bg-white p-8 rounded-3xl border border-primary-light/30 shadow-lg text-center">
+            <div className="bg-card p-8 rounded-3xl border border-primary-light/30 shadow-lg text-center">
               <LogIn className="mx-auto mb-4 text-primary" size={48} />
               <h3 className="text-xl font-bold text-primary-dark mb-4">Sign in to leave a wish</h3>
               <p className="text-text-secondary mb-6 text-sm">We use Google Login to keep the guestbook safe and friendly.</p>
@@ -123,7 +123,7 @@ export default function Guestbook() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-3xl border border-primary-light/30 shadow-lg">
+            <form onSubmit={handleSubmit} className="bg-card p-8 rounded-3xl border border-primary-light/30 shadow-lg">
               <div className="mb-6">
                 <label className="block text-sm font-bold text-primary-dark mb-2 uppercase tracking-wider">Your Name</label>
                 <input 
@@ -174,7 +174,7 @@ export default function Guestbook() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white p-6 rounded-2xl border border-primary-light/20 shadow-sm relative overflow-hidden group"
+                className="bg-card p-6 rounded-2xl border border-primary-light/20 shadow-sm relative overflow-hidden group"
               >
                 <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="flex justify-between items-start mb-2">

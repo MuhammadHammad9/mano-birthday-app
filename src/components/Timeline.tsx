@@ -19,7 +19,7 @@ export default function Timeline() {
             <div className="absolute top-0 left-[-9px] md:left-auto md:right-[-9px] w-4 h-4 rounded-full bg-primary border-4 border-white shadow-sm z-10" 
                  style={index % 2 !== 0 ? { left: '-9px' } : {}}></div>
             
-            <div className={`bg-white p-6 rounded-2xl border border-primary-light/30 shadow-sm inline-block w-full`}>
+            <div className={`bg-card p-6 rounded-2xl border border-primary-light/30 shadow-sm inline-block w-full`}>
               <span className="text-xs font-bold text-primary uppercase tracking-widest mb-2 block">{event.date}</span>
               <h3 className="text-xl font-bold text-primary-dark mb-2">{event.title}</h3>
               <p className="text-text-secondary text-sm leading-relaxed">{event.description}</p>

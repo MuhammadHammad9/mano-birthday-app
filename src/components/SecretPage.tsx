@@ -74,7 +74,7 @@ export default function SecretPage() {
               key="unlocked"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="bg-white p-8 md:p-16 rounded-[2rem] shadow-2xl border border-primary-light/30 relative overflow-hidden"
+              className="bg-card p-8 md:p-16 rounded-[2rem] shadow-2xl border border-primary-light/30 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8 text-primary/10">
                 <Sparkles size={120} />

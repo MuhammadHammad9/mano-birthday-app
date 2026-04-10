@@ -14,7 +14,7 @@ export default function Reasons() {
           {REASONS.map((reason, index) => (
             <div
               key={reason.id}
-              className="bg-white p-6 rounded-2xl border border-primary-light/30 flex items-start gap-4 animate-on-scroll"
+              className="bg-card p-6 rounded-2xl border border-primary-light/30 flex items-start gap-4 animate-on-scroll"
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <div className="w-10 h-10 rounded-full bg-primary-light/20 flex items-center justify-center shrink-0">

@@ -60,7 +60,7 @@ export default function LiveCounter() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 + (idx * 0.1) }}
-          className="flex flex-col items-center justify-center bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-3 md:p-5 w-[80px] md:w-[100px] shadow-xl hover:scale-105 transition-transform"
+          className="flex flex-col items-center justify-center bg-card/70 backdrop-blur-xl border border-primary-light/30 rounded-2xl p-3 md:p-5 w-[80px] md:w-[100px] shadow-xl hover:scale-105 transition-transform"
         >
           <span className="text-2xl md:text-4xl font-bold text-primary-dark font-display mb-1 tabular-nums">
             {unit.value}

@@ -47,7 +47,7 @@ export default function Quiz() {
 
   return (
     <section id="quiz" className="py-20 px-4 bg-primary-light/5">
-      <div className="max-w-xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-primary-light/20 min-h-[400px] flex flex-col justify-center animate-on-scroll">
+      <div className="max-w-xl mx-auto bg-card p-8 md:p-12 rounded-3xl shadow-xl border border-primary-light/20 min-h-[400px] flex flex-col justify-center animate-on-scroll">
         <AnimatePresence mode="wait">
           {currentStep === 'intro' && (
             <motion.div 
