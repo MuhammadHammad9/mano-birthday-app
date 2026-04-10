@@ -7,14 +7,14 @@ export default function VideoMessage() {
       </div>
 
       <div className="aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white animate-on-scroll bg-black flex items-center justify-center">
-        <video 
-          controls 
+        <iframe
           className="w-full h-full object-cover"
-          poster="/7.jpeg"
-        >
-          <source src="/WIN_20260410_20_48_59_Pro.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          src="https://www.youtube.com/embed/iCUCIlzMWaA"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        ></iframe>
       </div>
     </section>
   );
