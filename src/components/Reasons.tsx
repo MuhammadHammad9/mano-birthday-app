@@ -10,18 +10,25 @@ export default function Reasons() {
           <p className="text-text-secondary italic">Just a few of the million reasons...</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-8">
           {REASONS.map((reason, index) => (
             <div
               key={reason.id}
-              className="bg-card p-6 rounded-2xl border border-primary-light/30 flex items-start gap-4 animate-on-scroll"
+              className="bg-card rounded-2xl border border-primary-light/30 overflow-hidden shadow-sm hover:shadow-md transition-shadow animate-on-scroll"
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <div className="w-10 h-10 rounded-full bg-primary-light/20 flex items-center justify-center shrink-0">
-                <span className="text-primary font-bold">{index + 1}</span>
-              </div>
-              <div>
-                <p className="text-text-primary leading-relaxed">{reason.text}</p>
+              {reason.imageUrl && (
+                <div className="h-48 overflow-hidden">
+                  <img src={reason.imageUrl} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                </div>
+              )}
+              <div className="p-6 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-primary-light/20 flex items-center justify-center shrink-0">
+                  <span className="text-primary font-bold">{index + 1}</span>
+                </div>
+                <div>
+                  <p className="text-text-primary leading-relaxed font-medium">{reason.text}</p>
+                </div>
               </div>
             </div>
           ))}
